@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  CUSTOMER
+  SELLER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id            String   @id @default(uuid())
+  authId        String?  @unique
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  name          String?
+  image         String?
+  role          Role     @default(CUSTOMER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  medicines Medicine[]
+  orders    Order[]
+  reviews   Review[]
+  sessions  Session[]
+  accounts  Account[]
+
+  @@map("users")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  // relationship
+  medicines Medicine[]
+}
+
+model Medicine {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  quantity    Int
+  categoryId  String
+  sellerId    String
+  createdAt   DateTime @default(now())
+
+  category   Category    @relation(fields: [categoryId], references: [id])
+  seller     User        @relation(fields: [sellerId], references: [id])
+  orderItems OrderItem[]
+  reviews    Review[]
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  status      OrderStatus @default(PENDING)
+  totalAmount Float
+  customerId  String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  items    OrderItem[]
+  customer User        @relation(fields: [customerId], references: [id])
+}
+
+model OrderItem {
+  id         String @id @default(uuid())
+  orderId    String
+  medicineId String
+  quantity   Int
+  price      Float
+
+  medicine Medicine @relation(fields: [medicineId], references: [id])
+  order    Order    @relation(fields: [orderId], references: [id])
+
+  @@unique([orderId, medicineId])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  customerId String
+  medicineId String
+
+  medicine Medicine @relation(fields: [medicineId], references: [id])
+  customer User     @relation(fields: [customerId], references: [id])
+
+  @@unique([customerId, medicineId])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
