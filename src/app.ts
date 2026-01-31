@@ -7,6 +7,7 @@ import { medicineRouter } from "./modules/medicine/medicine.route";
 import { categoryRouter } from "./modules/category/category.route";
 import { orderRouter } from "./modules/order/order.router";
 import errorHandler from "./middleware/globalErrorHandler";
+import { orderItemRouter } from "./modules/orderItem/orderItem.router";
 // import errorHandler from "./middleware/globalErrorHandler";
 // import { notFound } from "./middleware/notFound";
 
@@ -34,6 +35,9 @@ app.use("/api/v1/category", categoryRouter);
 
 //order router
 app.use("/api/v1/order", orderRouter);
+
+//orderitem router
+app.use("/api/v1/orderitem", orderItemRouter);
 
 app.get("/", (reg, res) => {
   res.send("Hello world");

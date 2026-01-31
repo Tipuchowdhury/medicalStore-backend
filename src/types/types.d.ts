@@ -1,3 +1,5 @@
+import { OrderItemStatus } from "../../generated/prisma/enums";
+
 export interface createMedicineData {
   id: string;
   name: string;
@@ -28,4 +30,12 @@ export interface updateMedicineType {
   price?: number;
   quantity?: number;
   categoryId?: string;
+}
+
+export interface updateOrderItemType {
+  orderId?: string;
+  medicineId?: string;
+  quantity?: number;
+  price?: number;
+  status: OrderItemStatus;
 }

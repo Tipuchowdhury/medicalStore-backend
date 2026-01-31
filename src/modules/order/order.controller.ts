@@ -59,8 +59,26 @@ const getOrderById = async (req: Request, res: Response) => {
     });
   }
 };
+
+const getSellerOrders = async (req: Request, res: Response) => {
+  try {
+    const result = await orderService.getSellerOrders(req.user?.id as string);
+    res.status(200).json({
+      success: true,
+      data: result,
+      message: "Order fetched successfully",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const orderController = {
   createOrder,
   getOrder,
   getOrderById,
+  getSellerOrders,
 };

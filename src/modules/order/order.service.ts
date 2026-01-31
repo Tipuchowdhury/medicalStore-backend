@@ -52,6 +52,7 @@ const createOrder = async (items: createOrderData[], customerId: string) => {
       },
       data: {
         totalAmount: total,
+        status: "CONFIRMED",
       },
     });
   });
@@ -84,8 +85,46 @@ const getOrderById = async (orderId: string, customerId: string) => {
   return result;
 };
 
+const getSellerOrders = async (sellerId: string) => {
+  const result = prisma.order.findMany({
+    where: {
+      items: {
+        some: {
+          medicine: {
+            sellerId: sellerId,
+          },
+        },
+      },
+    },
+    include: {
+      items: {
+        where: {
+          medicine: {
+            sellerId: sellerId,
+          },
+        },
+        include: {
+          medicine: true,
+        },
+      },
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return result;
+};
+
 export const orderService = {
   createOrder,
   getOrder,
   getOrderById,
+  getSellerOrders,
 };

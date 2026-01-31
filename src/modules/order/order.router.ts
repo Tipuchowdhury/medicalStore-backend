@@ -8,6 +8,8 @@ router.get(
   auth(UserRole.CUSTOMER, UserRole.ADMIN),
   orderController.getOrder,
 );
+router.get("/seller", auth(UserRole.SELLER), orderController.getSellerOrders);
+
 router.get(
   "/:id",
   auth(UserRole.CUSTOMER, UserRole.ADMIN),

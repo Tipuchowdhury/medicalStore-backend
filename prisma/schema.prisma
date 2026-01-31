@@ -27,6 +27,14 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum OrderItemStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 model User {
   id            String   @id @default(uuid())
   email         String   @unique
@@ -87,11 +95,12 @@ model Order {
 }
 
 model OrderItem {
-  id         String @id @default(uuid())
+  id         String          @id @default(uuid())
   orderId    String
   medicineId String
   quantity   Int
   price      Float
+  status     OrderItemStatus @default(PENDING)
 
   medicine Medicine @relation(fields: [medicineId], references: [id], onDelete: Cascade)
   order    Order    @relation(fields: [orderId], references: [id])
