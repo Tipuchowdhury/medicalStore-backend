@@ -21,3 +21,11 @@ export interface createOrderItemData {
   quantity: int;
   price: float;
 }
+
+export interface updateMedicineType {
+  name?: string;
+  description?: string;
+  price?: number;
+  quantity?: number;
+  categoryId?: string;
+}

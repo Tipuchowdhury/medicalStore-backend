@@ -93,7 +93,7 @@ model OrderItem {
   quantity   Int
   price      Float
 
-  medicine Medicine @relation(fields: [medicineId], references: [id])
+  medicine Medicine @relation(fields: [medicineId], references: [id], onDelete: Cascade)
   order    Order    @relation(fields: [orderId], references: [id])
 
   @@unique([orderId, medicineId])

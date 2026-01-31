@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { createMedicineData } from "../../types/types";
+import { createMedicineData, updateMedicineType } from "../../types/types";
 
 const createMedicine = async (data: createMedicineData, sellerId: string) => {
   const result = await prisma.medicine.create({
@@ -29,8 +29,58 @@ const getMedicineById = async (id: string) => {
   return result;
 };
 
+const updateMedicine = async (
+  sellerId: string,
+  medicineId: string,
+  data: updateMedicineType,
+) => {
+  const medicine = await prisma.medicine.findUnique({
+    where: {
+      id: medicineId,
+    },
+  });
+
+  if (!medicine) {
+    throw new Error("Medicine not found");
+  }
+  if (medicine.sellerId != sellerId) {
+    throw new Error("Unauthorized!!!");
+  }
+  const result = await prisma.medicine.update({
+    where: {
+      id: medicineId,
+    },
+    data,
+  });
+
+  return result;
+};
+
+const deleteMedicine = async (sellerId: string, medicineId: string) => {
+  const medicine = await prisma.medicine.findFirst({
+    where: {
+      id: medicineId,
+    },
+  });
+
+  if (!medicine) {
+    throw new Error("Medicine not found");
+  }
+  if (medicine.sellerId != sellerId) {
+    throw new Error("Unauthorized!!!");
+  }
+  const result = await prisma.medicine.delete({
+    where: {
+      id: medicineId,
+    },
+  });
+
+  return result;
+};
 export const medicineService = {
   createMedicine,
   getMedicine,
   getMedicineById,
+  updateMedicine,
+  deleteMedicine,
 };

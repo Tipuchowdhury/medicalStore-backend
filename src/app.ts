@@ -6,6 +6,7 @@ import { authRouter } from "./modules/auth/auth.route";
 import { medicineRouter } from "./modules/medicine/medicine.route";
 import { categoryRouter } from "./modules/category/category.route";
 import { orderRouter } from "./modules/order/order.router";
+import errorHandler from "./middleware/globalErrorHandler";
 // import errorHandler from "./middleware/globalErrorHandler";
 // import { notFound } from "./middleware/notFound";
 
@@ -38,5 +39,5 @@ app.get("/", (reg, res) => {
   res.send("Hello world");
 });
 // app.use(notFound);
-// app.use(errorHandler);
+app.use(errorHandler);
 export default app;
