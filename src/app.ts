@@ -8,6 +8,7 @@ import { categoryRouter } from "./modules/category/category.route";
 import { orderRouter } from "./modules/order/order.router";
 import errorHandler from "./middleware/globalErrorHandler";
 import { orderItemRouter } from "./modules/orderItem/orderItem.router";
+import { adminRouter } from "./modules/admin/admin.router";
 // import errorHandler from "./middleware/globalErrorHandler";
 // import { notFound } from "./middleware/notFound";
 
@@ -38,6 +39,9 @@ app.use("/api/v1/order", orderRouter);
 
 //orderitem router
 app.use("/api/v1/orderitem", orderItemRouter);
+
+//admin router
+app.use("/api/v1/users", adminRouter);
 
 app.get("/", (reg, res) => {
   res.send("Hello world");
