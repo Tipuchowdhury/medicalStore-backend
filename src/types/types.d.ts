@@ -39,3 +39,12 @@ export interface updateOrderItemType {
   price?: number;
   status: OrderItemStatus;
 }
+
+export interface createMedicineType {
+  items: [
+    {
+      medicineId: string;
+      quantity: number;
+    },
+  ];
+}
