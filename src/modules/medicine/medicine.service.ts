@@ -43,6 +43,7 @@ const getMedicine = async ({
     where: whereCondition,
     include: {
       category: true,
+      seller: true,
     },
   });
   return result;
@@ -53,6 +54,10 @@ const getMedicineById = async (id: string) => {
     where: {
       id: id,
     },
+    // include: {
+    //   category: true,
+    //   seller: true,
+    // },
   });
   return result;
 };
