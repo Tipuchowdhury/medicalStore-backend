@@ -11,8 +11,36 @@ const createMedicine = async (data: createMedicineData, sellerId: string) => {
   return result;
 };
 
-const getMedicine = async () => {
+const getMedicine = async ({
+  search,
+  category,
+  price_range,
+}: {
+  search?: string;
+  category?: string | undefined;
+  price_range?: string | undefined;
+}) => {
+  const whereCondition: any = {};
+  if (search) {
+    whereCondition.name = {
+      contains: search,
+      mode: "insensitive",
+    };
+  }
+  if (category) {
+    whereCondition.category = {
+      name: category,
+    };
+  }
+  if (price_range) {
+    const [min, max] = price_range.split("-").map(Number);
+    whereCondition.price = {
+      gte: min,
+      lte: max,
+    };
+  }
   const result = await prisma.medicine.findMany({
+    where: whereCondition,
     include: {
       category: true,
     },

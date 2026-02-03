@@ -24,7 +24,15 @@ const createMedicine = async (req: Request, res: Response) => {
 
 const getMedicine = async (req: Request, res: Response) => {
   try {
-    const result = await medicineService.getMedicine();
+    const { search } = req.query;
+    const category = req.query.category as string | undefined;
+    const price_range = req.query.price_range as string | undefined;
+    const result = await medicineService.getMedicine({
+      search: search as string,
+      category,
+      price_range,
+    });
+
     res.status(200).json({
       success: true,
       data: result,
