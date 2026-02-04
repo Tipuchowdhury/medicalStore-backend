@@ -10,7 +10,8 @@
     "migrate": "npx prisma migrate dev",
     "prisma:generate": "npx prisma generate",
     "studio": "npx prisma studio",
-    "auth:generate": "npx @better-auth/cli generate"
+    "auth:generate": "npx @better-auth/cli generate",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
