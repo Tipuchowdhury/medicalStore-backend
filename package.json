@@ -11,7 +11,8 @@
     "prisma:generate": "npx prisma generate",
     "studio": "npx prisma studio",
     "auth:generate": "npx @better-auth/cli generate",
-    "build": "tsc"
+    "build": "npm i && tsc",
+    "postinstall": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
